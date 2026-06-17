@@ -1,0 +1,9 @@
+instances:
+  - url: https://BrokenRubik.docs.buildwithfern.com
+title: Broken Rubik | Documentation
+navigation:
+  - api: API Reference
+    paginated: true
+colors:
+  accentPrimary: '#ffffff'
+  background: '#000000'
