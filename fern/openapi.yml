@@ -2,6 +2,13 @@ openapi: 3.1.0
 info:
   title: KLIM Warranty Case RESTlet API - Full Documentation
   version: 1.0.0
+tags:
+  - name: subpackage_01GetFormOptions
+    x-displayName: Get Form Options
+  - name: subpackage_02CreateSupportCase
+    x-displayName: Create Support Case
+  - name: subpackage_03UploadWarrantyImages
+    x-displayName: Upload Warranty Images
 paths:
   /app/site/hosting/restlet.nl:
     post:
@@ -81,7 +88,6 @@ paths:
         as `customerName`, `confirmEmail`, `poNumber`, `briefDescription`, and the optional checkboxes are omitted.
       tags:
         - subpackage_02CreateSupportCase
-        x-displayName: Create Support Case
       responses:
         '200':
           description: OK
