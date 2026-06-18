@@ -1,0 +1,488 @@
+openapi: 3.1.0
+info:
+  title: KLIM Warranty Case RESTlet API - Full Documentation
+  version: 1.0.0
+paths:
+  /app/site/hosting/restlet.nl:
+    post:
+      operationId: get-form-options
+      summary: Get Form Options
+      description: >-
+        Retrieves all form option lists required by the Shopify warranty form.
+
+
+        The returned country `value` is a numeric `Country.UniqueKey`. The country `code` is provided only as
+        informational metadata.
+      tags:
+        - subpackage_01GetFormOptions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/01 - Get Form Options_Get Form Options_Response_200'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+              required:
+                - action
+  /app/site/hosting/restlet.nl#postAppSiteHostingRestlet.nl2:
+    post:
+      operationId: create-case-full-payload
+      summary: Create Case - Full Payload
+      description: |
+        Creates a Support Case using all documented required fields plus the supported optional fields.
+
+        Important implementation details:
+
+        - `countryId` must be the numeric `value` returned by `getFormOptions.countries`.
+        - `productTypeId` is saved to `custevent_producttype`; its NetSuite text is also used as the Case title.
+        - `customerName` is only needed when a dealer submits on behalf of a customer.
+        - `confirmEmail` is optional, but when supplied it must match `email`.
+        - `evalPhoto` and `evalPhysical` default to `false` when omitted.
+      tags:
+        - subpackage_02CreateSupportCase
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/02 - Create Support Case_Create Case - Full Payload_Response_200'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  $ref: >-
+                    #/components/schemas/AppSiteHostingRestletNlPostAppSiteHostingRestletNl2PostRequestBodyContentApplicationJsonSchemaData
+                action:
+                  type: string
+              required:
+                - data
+                - action
+  /app/site/hosting/restlet.nl#postAppSiteHostingRestlet.nl3:
+    post:
+      operationId: create-case-required-fields-only
+      summary: Create Case - Required Fields Only
+      description: >
+        Creates a Support Case using only the required fields.
+
+
+        This example is useful for confirming the minimum Shopify payload accepted by the RESTlet. Optional fields such
+        as `customerName`, `confirmEmail`, `poNumber`, `briefDescription`, and the optional checkboxes are omitted.
+      tags:
+        - subpackage_02CreateSupportCase
+        x-displayName: Create Support Case
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/02 - Create Support Case_Create Case - Required Fields Only_Response_200'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  $ref: >-
+                    #/components/schemas/AppSiteHostingRestletNlPostAppSiteHostingRestletNl3PostRequestBodyContentApplicationJsonSchemaData
+                action:
+                  type: string
+              required:
+                - data
+                - action
+  /app/site/hosting/restlet.nl#postAppSiteHostingRestlet.nl4:
+    post:
+      operationId: upload-image
+      summary: Upload Image
+      description: >
+        Uploads one file to an existing Support Case.
+
+
+        Run `createCase` first and place the returned Case internal ID in the `caseId` collection variable. Call this
+        action once per image and increment `imageIndex` from 1 through 10 to populate the corresponding NetSuite Case
+        image field.
+      tags:
+        - subpackage_03UploadWarrantyImages
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/03 - Upload Warranty Images_Upload Image_Response_200'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                base64:
+                  type: string
+                caseId:
+                  type: string
+                fileName:
+                  type: string
+                mimeType:
+                  type: string
+                imageIndex:
+                  type: integer
+              required:
+                - action
+                - base64
+                - caseId
+                - fileName
+                - mimeType
+                - imageIndex
+servers:
+  - url: https://your_account_id.restlets.api.netsuite.com
+    description: https://your_account_id.restlets.api.netsuite.com
+components:
+  schemas:
+    AppSiteHostingRestletNlPostResponsesContentApplicationJsonSchemaDataListsCountriesItems:
+      type: object
+      properties:
+        code:
+          type: string
+        text:
+          type: string
+        value:
+          type: string
+      required:
+        - code
+        - text
+        - value
+      title: AppSiteHostingRestletNlPostResponsesContentApplicationJsonSchemaDataListsCountriesItems
+    AppSiteHostingRestletNlPostResponsesContentApplicationJsonSchemaDataListsLocationsItems:
+      type: object
+      properties:
+        text:
+          type: string
+        value:
+          type: string
+      required:
+        - text
+        - value
+      title: AppSiteHostingRestletNlPostResponsesContentApplicationJsonSchemaDataListsLocationsItems
+    AppSiteHostingRestletNlPostResponsesContentApplicationJsonSchemaDataListsProductTypesItems:
+      type: object
+      properties:
+        text:
+          type: string
+        value:
+          type: string
+      required:
+        - text
+        - value
+      title: AppSiteHostingRestletNlPostResponsesContentApplicationJsonSchemaDataListsProductTypesItems
+    AppSiteHostingRestletNlPostResponsesContentApplicationJsonSchemaDataListsItemActivitiesItems:
+      type: object
+      properties:
+        text:
+          type: string
+        value:
+          type: string
+      required:
+        - text
+        - value
+      title: AppSiteHostingRestletNlPostResponsesContentApplicationJsonSchemaDataListsItemActivitiesItems
+    AppSiteHostingRestletNlPostResponsesContentApplicationJsonSchemaDataLists:
+      type: object
+      properties:
+        countries:
+          type: array
+          items:
+            $ref: >-
+              #/components/schemas/AppSiteHostingRestletNlPostResponsesContentApplicationJsonSchemaDataListsCountriesItems
+        locations:
+          type: array
+          items:
+            $ref: >-
+              #/components/schemas/AppSiteHostingRestletNlPostResponsesContentApplicationJsonSchemaDataListsLocationsItems
+        productTypes:
+          type: array
+          items:
+            $ref: >-
+              #/components/schemas/AppSiteHostingRestletNlPostResponsesContentApplicationJsonSchemaDataListsProductTypesItems
+        itemActivities:
+          type: array
+          items:
+            $ref: >-
+              #/components/schemas/AppSiteHostingRestletNlPostResponsesContentApplicationJsonSchemaDataListsItemActivitiesItems
+      required:
+        - countries
+        - locations
+        - productTypes
+        - itemActivities
+      title: AppSiteHostingRestletNlPostResponsesContentApplicationJsonSchemaDataLists
+    AppSiteHostingRestletNlPostResponsesContentApplicationJsonSchemaData:
+      type: object
+      properties:
+        lists:
+          $ref: '#/components/schemas/AppSiteHostingRestletNlPostResponsesContentApplicationJsonSchemaDataLists'
+      required:
+        - lists
+      title: AppSiteHostingRestletNlPostResponsesContentApplicationJsonSchemaData
+    01 - Get Form Options_Get Form Options_Response_200:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/AppSiteHostingRestletNlPostResponsesContentApplicationJsonSchemaData'
+        action:
+          type: string
+        message:
+          type: string
+        success:
+          type: boolean
+      required:
+        - data
+        - action
+        - message
+        - success
+      title: 01 - Get Form Options_Get Form Options_Response_200
+    AppSiteHostingRestletNlPostAppSiteHostingRestletNl2PostRequestBodyContentApplicationJsonSchemaData:
+      type: object
+      properties:
+        city:
+          type: string
+        email:
+          type: string
+          format: email
+        poNumber:
+          type: string
+        countryId:
+          type: string
+        evalPhoto:
+          type: boolean
+        locationId:
+          type: string
+        postalCode:
+          type: string
+        phoneNumber:
+          type: string
+        productSize:
+          type: string
+        repairQuote:
+          type: boolean
+        confirmEmail:
+          type: string
+          format: email
+        customerName:
+          type: string
+        evalPhysical:
+          type: boolean
+        purchaseDate:
+          type: string
+        productTypeId:
+          type: string
+        stateProvince:
+          type: string
+        streetAddress:
+          type: string
+        submitterName:
+          type: string
+        warrantyClaim:
+          type: boolean
+        itemActivityId:
+          type: string
+        incomingMessage:
+          type: string
+        briefDescription:
+          type: string
+        productStyleColor:
+          type: string
+        acceptsCleaningFee:
+          type: boolean
+        acceptsPrivacyPolicy:
+          type: boolean
+        additionalWarranties:
+          type: boolean
+        acceptsWarrantyPolicy:
+          type: boolean
+      required:
+        - city
+        - email
+        - poNumber
+        - countryId
+        - evalPhoto
+        - locationId
+        - postalCode
+        - phoneNumber
+        - productSize
+        - repairQuote
+        - confirmEmail
+        - customerName
+        - evalPhysical
+        - purchaseDate
+        - productTypeId
+        - stateProvince
+        - streetAddress
+        - submitterName
+        - warrantyClaim
+        - itemActivityId
+        - incomingMessage
+        - briefDescription
+        - productStyleColor
+        - acceptsCleaningFee
+        - acceptsPrivacyPolicy
+        - additionalWarranties
+        - acceptsWarrantyPolicy
+      title: AppSiteHostingRestletNlPostAppSiteHostingRestletNl2PostRequestBodyContentApplicationJsonSchemaData
+    AppSiteHostingRestletNlPostAppSiteHostingRestletNl2PostResponsesContentApplicationJsonSchemaData:
+      type: object
+      properties:
+        caseId:
+          type: string
+      required:
+        - caseId
+      title: AppSiteHostingRestletNlPostAppSiteHostingRestletNl2PostResponsesContentApplicationJsonSchemaData
+    02 - Create Support Case_Create Case - Full Payload_Response_200:
+      type: object
+      properties:
+        data:
+          $ref: >-
+            #/components/schemas/AppSiteHostingRestletNlPostAppSiteHostingRestletNl2PostResponsesContentApplicationJsonSchemaData
+        action:
+          type: string
+        message:
+          type: string
+        success:
+          type: boolean
+      required:
+        - data
+        - action
+        - message
+        - success
+      title: 02 - Create Support Case_Create Case - Full Payload_Response_200
+    AppSiteHostingRestletNlPostAppSiteHostingRestletNl3PostRequestBodyContentApplicationJsonSchemaData:
+      type: object
+      properties:
+        city:
+          type: string
+        email:
+          type: string
+          format: email
+        countryId:
+          type: string
+        locationId:
+          type: string
+        postalCode:
+          type: string
+        phoneNumber:
+          type: string
+        productSize:
+          type: string
+        purchaseDate:
+          type: string
+        productTypeId:
+          type: string
+        stateProvince:
+          type: string
+        streetAddress:
+          type: string
+        submitterName:
+          type: string
+        itemActivityId:
+          type: string
+        incomingMessage:
+          type: string
+        productStyleColor:
+          type: string
+        acceptsCleaningFee:
+          type: boolean
+        acceptsPrivacyPolicy:
+          type: boolean
+        acceptsWarrantyPolicy:
+          type: boolean
+      required:
+        - city
+        - email
+        - countryId
+        - locationId
+        - postalCode
+        - phoneNumber
+        - productSize
+        - purchaseDate
+        - productTypeId
+        - stateProvince
+        - streetAddress
+        - submitterName
+        - itemActivityId
+        - incomingMessage
+        - productStyleColor
+        - acceptsCleaningFee
+        - acceptsPrivacyPolicy
+        - acceptsWarrantyPolicy
+      title: AppSiteHostingRestletNlPostAppSiteHostingRestletNl3PostRequestBodyContentApplicationJsonSchemaData
+    AppSiteHostingRestletNlPostAppSiteHostingRestletNl3PostResponsesContentApplicationJsonSchemaData:
+      type: object
+      properties:
+        caseId:
+          type: string
+      required:
+        - caseId
+      title: AppSiteHostingRestletNlPostAppSiteHostingRestletNl3PostResponsesContentApplicationJsonSchemaData
+    02 - Create Support Case_Create Case - Required Fields Only_Response_200:
+      type: object
+      properties:
+        data:
+          $ref: >-
+            #/components/schemas/AppSiteHostingRestletNlPostAppSiteHostingRestletNl3PostResponsesContentApplicationJsonSchemaData
+        action:
+          type: string
+        message:
+          type: string
+        success:
+          type: boolean
+      required:
+        - data
+        - action
+        - message
+        - success
+      title: 02 - Create Support Case_Create Case - Required Fields Only_Response_200
+    AppSiteHostingRestletNlPostAppSiteHostingRestletNl4PostResponsesContentApplicationJsonSchemaData:
+      type: object
+      properties:
+        caseId:
+          type: string
+        fileId:
+          type: string
+        imageIndex:
+          type: integer
+      required:
+        - caseId
+        - fileId
+        - imageIndex
+      title: AppSiteHostingRestletNlPostAppSiteHostingRestletNl4PostResponsesContentApplicationJsonSchemaData
+    03 - Upload Warranty Images_Upload Image_Response_200:
+      type: object
+      properties:
+        data:
+          $ref: >-
+            #/components/schemas/AppSiteHostingRestletNlPostAppSiteHostingRestletNl4PostResponsesContentApplicationJsonSchemaData
+        action:
+          type: string
+        message:
+          type: string
+        success:
+          type: boolean
+      required:
+        - data
+        - action
+        - message
+        - success
+      title: 03 - Upload Warranty Images_Upload Image_Response_200
